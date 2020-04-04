@@ -20,20 +20,21 @@ export class Map {
   get grid1D(): any[] {
     return this._grid;
   }
-  get grid2D(){
-    return Map.to2D(this._grid, this._width);
+  get grid2D() {
+    return Map.to2D(this._grid, this._width, this._height);
   }
 
-  public static to1D(grid:any){
-    return grid.map((row:any) => row).flat()
+  public static to1D(grid: any) {
+    return grid.map((row: any) => row).flat();
   }
 
-  public static to2D(grid:any, width:number){
-    let result = createEmpty2D(width, 1);
-    return  result.map((_, i) => {
+  public static to2D(grid: any, width: number, height: number) {
+    let result = createEmpty2D(width, height);
+    grid.forEach((cell:any, i:number) => {
       const row = Math.floor(i / width);
       const col = i % width;
-      return grid[width * row + col]
-    })
+      result[row][col] = cell;
+    });
+    return result
   }
 }
