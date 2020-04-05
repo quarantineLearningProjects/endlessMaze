@@ -3,5 +3,5 @@ export const createEmpty1D = (width: number) => {
 };
 
 export const createEmpty2D = (width: number, height: number) => {
-  return [...Array(height)].map((_) => [...Array(width)].map(_ => null));
+  return [...Array(height)].map((_) => [...Array(width)].map(_ => "_"));
 };

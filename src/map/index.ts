@@ -18,10 +18,10 @@ export class Map {
     return this._height;
   }
   get grid1D(): any[] {
-    return this._grid;
+    return Map.to1D(this._grid);
   }
   get grid2D() {
-    return Map.to2D(this._grid, this._width, this._height);
+    return this._grid;
   }
 
   public static to1D(grid: any) {
