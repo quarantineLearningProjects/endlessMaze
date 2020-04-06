@@ -1,75 +1,94 @@
 export class Timer {
-    initialTime: number;
-    currentTime: number;
-    rate:number;
-    timerId: number;
+  private _initialTime: number;
+  private _currentTime: number;
+  private _rate: number;
+  private _timerId: number;
 
-    constructor (duration: number, rate: number = 1) {
-        this.initialTime = duration;
-        this.currentTime = duration;
-        this.rate = rate;
-    }
+  constructor(duration: number, rate: number = 1) {
+    this._initialTime = duration;
+    this._currentTime = duration;
+    this._rate = rate;
+  }
 
-    getCurrentTime() {
-        return this.currentTime;
-    }
+  get currentTime() {
+    return this._currentTime;
+  }
 
-    setCurrentTime(duration: number) {
-        this.currentTime = duration;
-    }
+  set currentTime(duration: number) {
+    this._currentTime = duration;
+  }
 
-    getRate() {
-        return this.rate;
-    }
-    
-    setRate(rate: number) {
-        this.rate = rate;
-    }
+  get rate() {
+    return this._rate;
+  }
 
-    isZero() {
-        return Math.floor(this.getCurrentTime()) == 0;
-    }
+  set rate(rate: number) {
+    this._rate = rate;
+  }
 
-    isPositive() {
-        return Math.floor(this.getCurrentTime()) > 0;
-    }
+  isZero() {
+    return this.currentTime == 0;
+  }
 
-    addTime(duration: number) {
-        this.currentTime += duration;
-    }
+  isPositive() {
+    return this.currentTime > 0;
+  }
 
-    subtractTime(duration: number) {
-        this.currentTime -= duration;
-    }
+  addSeconds(duration: number) {
+    this._currentTime += duration * 1000;
+  }
 
-    increment() {
-        this.addTime(1);
-    }
+  subtractSeconds(duration: number) {
+    this._currentTime -= duration * 1000;
+  }
 
-    decrement() {
-        this.subtractTime(1);
-    }
+  addMilliseconds(duration: number) {
+    this._currentTime += duration;
+  }
 
-    getMinutes() {
-        return Math.floor(this.getCurrentTime() / 60);
-    }
+  subtractMilliseconds(duration: number) {
+    this._currentTime -= duration;
+  }
 
-    getSeconds() {
-        return Math.floor(this.getCurrentTime() % 60);
-    }
+  incrementSecond() {
+    this.addSeconds(1);
+  }
 
-    startTime() {
-        // rate determines how many times per second time decrements by 1
-        this.timerId = setInterval(() => {
-            this.decrement(); 
-            if (this.isZero()) {
-                clearInterval(this.timerId)}
-            }
-            , 1000/this.getRate())
-    }
+  decrementSecond() {
+    this.subtractSeconds(1);
+  }
 
-    pauseTime() {
-        clearInterval(this.timerId);
-    }
+  incrementMillisecond() {
+    this.addMilliseconds(1);
+  }
 
+  decrementMillisecond() {
+    this.subtractMilliseconds(1);
+  }
+
+  get minutes() {
+    return Math.floor(this.currentTime / 60000);
+  }
+
+  get seconds() {
+    return Math.floor(this.currentTime / 1000);
+  }
+
+  get milliseconds() {
+    return this.currentTime % 1000;
+  }
+
+  start() {
+    // rate determines how many times per millisecond time decrements by 1
+    this._timerId = setInterval(() => {
+      if (!this.isPositive()) {
+        clearInterval(this._timerId);
+      }
+      this.decrementMillisecond();
+    }, 1 / this.rate);
+  }
+
+  pause() {
+    clearInterval(this._timerId);
+  }
 }
